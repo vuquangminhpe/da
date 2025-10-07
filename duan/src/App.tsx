@@ -1,4 +1,4 @@
-import Section1Journey from "./components/sections/Section1Journey";
+import Section1Journey from "./components/sections/Section1Journey_Globe";
 import "./App.css";
 
 function App() {
