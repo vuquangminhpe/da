@@ -592,47 +592,6 @@ function Moon() {
           side={THREE.BackSide}
         />
       </mesh>
-
-      {/* Moon Phase Info Label */}
-      {currentMoonData && moonRef.current && (
-        <Html
-          position={[
-            moonRef.current.position.x,
-            moonRef.current.position.y + 1.2,
-            moonRef.current.position.z,
-          ]}
-          center
-          distanceFactor={6}
-          style={{
-            pointerEvents: "none",
-            userSelect: "none",
-          }}
-        >
-          <div
-            className="px-4 py-2 rounded-lg bg-slate-900/90 border border-blue-400/50 backdrop-blur-sm"
-            style={{
-              boxShadow: "0 0 20px rgba(96, 165, 250, 0.4)",
-            }}
-          >
-            <div className="text-xs text-blue-200 font-semibold">
-              🌙{" "}
-              {currentMoonData.phase < 25
-                ? "🌑 New Moon"
-                : currentMoonData.phase < 45
-                ? "🌒 Waxing Crescent"
-                : currentMoonData.phase < 55
-                ? "🌕 Full Moon"
-                : currentMoonData.phase < 75
-                ? "🌘 Waning Crescent"
-                : "🌑 New Moon"}
-            </div>
-            <div className="text-[10px] text-blue-300/80 mt-1">
-              Phase: {currentMoonData.phase.toFixed(1)}% | Age:{" "}
-              {currentMoonData.age.toFixed(1)}d
-            </div>
-          </div>
-        </Html>
-      )}
     </group>
   );
 }
