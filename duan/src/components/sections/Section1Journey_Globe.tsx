@@ -24,7 +24,38 @@ const Section1Journey = () => {
     "young"
   );
   const [showIntro, setShowIntro] = useState<boolean>(true);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const popupTimeoutRef = useRef<number | null>(null);
+
+  // Effect to handle popup animation with delay
+  useEffect(() => {
+    if (currentStopIndex >= 0 && selectedStop) {
+      // Clear any existing timeout
+      if (popupTimeoutRef.current) {
+        clearTimeout(popupTimeoutRef.current);
+      }
+
+      // Hide popup first with scale down animation
+      setIsTransitioning(true);
+      setShowPopup(false);
+
+      // Wait for Globe to rotate and highlight (1.5 seconds)
+      popupTimeoutRef.current = window.setTimeout(() => {
+        setShowPopup(true);
+        setIsTransitioning(false);
+      }, 1500);
+    } else {
+      setShowPopup(false);
+    }
+
+    return () => {
+      if (popupTimeoutRef.current) {
+        clearTimeout(popupTimeoutRef.current);
+      }
+    };
+  }, [currentStopIndex, selectedStop]);
 
   // Auto-play journey function
   const playJourney = () => {
@@ -236,11 +267,8 @@ const Section1Journey = () => {
           </div>
         </div>
 
-        {/* Globe Container */}
-        <div
-          className="bg-slate-800/50 backdrop-blur-sm rounded-3xl shadow-2xl p-4 md:p-8 border border-blue-500/20 mb-6 relative"
-          style={{ height: "1000px" }}
-        >
+        {/* Globe Container - Full Screen */}
+        <div className="fixed inset-0 w-full h-screen z-10">
           <Globe3D
             currentStopIndex={currentStopIndex}
             journeyStops={journeyStops}
@@ -296,122 +324,160 @@ const Section1Journey = () => {
           )}
         </div>
 
-        {/* Bottom Info Bar - Centered and Larger */}
-        {selectedStop && currentStopIndex >= 0 && (
-          <div className="bg-gradient-to-br from-slate-800/95 to-blue-900/95 backdrop-blur-xl p-12 rounded-3xl border-2 border-blue-500/30 shadow-2xl mb-6 max-w-5xl mx-auto">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <div className="flex items-center justify-center gap-6 mb-4">
-                <span className="text-yellow-400 font-bold text-lg">
-                  Điểm dừng {currentStopIndex + 1}/{journeyStops.length}
-                </span>
-                <span className="text-blue-300 text-lg">
-                  {selectedStop.date}
-                </span>
-                {selectedStop.alias && (
-                  <span className="text-orange-400 text-lg italic">
-                    "{selectedStop.alias}"
-                  </span>
-                )}
-              </div>
-
-              <h3 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 mb-4">
-                {selectedStop.location}
-              </h3>
-              <p className="text-3xl text-blue-200 font-semibold">
-                {selectedStop.city}, {selectedStop.country}
-              </p>
-            </div>
-
-            {/* Image - Centered */}
-            {selectedStop.imageUrl && (
-              <div className="flex justify-center mb-8">
-                <div className="relative max-w-2xl">
-                  <img
-                    src={selectedStop.imageUrl}
-                    alt={selectedStop.location}
-                    className="rounded-2xl shadow-2xl border-4 border-blue-500/30 w-full object-cover"
-                    style={{ maxHeight: "400px" }}
+        {/* Info Popup Overlay - Centered with Scale Animation */}
+        {selectedStop && currentStopIndex >= 0 && showPopup && (
+          <div className="fixed inset-0 z-40 flex items-center justify-center pointer-events-none px-4">
+            <div
+              className={`bg-gradient-to-br from-slate-800/98 to-blue-900/98 backdrop-blur-xl p-8 rounded-3xl border-2 border-blue-500/30 shadow-2xl max-w-6xl w-full max-h-[80vh] overflow-y-auto pointer-events-auto ${
+                isTransitioning ? "animate-scale-down" : "animate-scale-up"
+              }`}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => {
+                  setIsTransitioning(true);
+                  setShowPopup(false);
+                  setTimeout(() => {
+                    setSelectedStop(null);
+                    setCurrentStopIndex(-1);
+                  }, 400);
+                }}
+                className="absolute top-4 right-4 text-blue-200 hover:text-white bg-blue-900/50 hover:bg-blue-800/80 rounded-full p-2 transition-all duration-300 z-10"
+                aria-label="Close"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-2xl pointer-events-none" />
+                </svg>
+              </button>
+
+              {/* Header */}
+              <div className="text-center mb-6">
+                <div className="flex items-center justify-center gap-4 mb-3 flex-wrap">
+                  <span className="text-yellow-400 font-bold text-base">
+                    Điểm dừng {currentStopIndex + 1}/{journeyStops.length}
+                  </span>
+                  <span className="text-blue-300 text-base">
+                    {selectedStop.date}
+                  </span>
+                  {selectedStop.alias && (
+                    <span className="text-orange-400 text-base italic">
+                      "{selectedStop.alias}"
+                    </span>
+                  )}
+                </div>
+
+                <h3 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 mb-3">
+                  {selectedStop.location}
+                </h3>
+                <p className="text-2xl text-blue-200 font-semibold">
+                  {selectedStop.city}, {selectedStop.country}
+                </p>
+              </div>
+
+              {/* Content Grid - 2 Columns */}
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Left Column - Image */}
+                {selectedStop.imageUrl && (
+                  <div className="flex items-start">
+                    <div className="relative w-full">
+                      <img
+                        src={selectedStop.imageUrl}
+                        alt={selectedStop.location}
+                        className="rounded-2xl shadow-2xl border-4 border-blue-500/30 w-full object-cover"
+                        style={{ maxHeight: "300px" }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-2xl pointer-events-none" />
+                    </div>
+                  </div>
+                )}
+
+                {/* Right Column - Content */}
+                <div className="space-y-4">
+                  <div className="bg-gradient-to-r from-yellow-900/20 to-orange-900/20 p-4 rounded-2xl border border-yellow-500/30">
+                    <h4 className="text-yellow-300 font-bold text-lg mb-2 flex items-center">
+                      <span className="mr-2 text-xl">📍</span> Sự kiện
+                    </h4>
+                    <p className="text-blue-100 text-base leading-relaxed">
+                      {selectedStop.event}
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 p-4 rounded-2xl border border-blue-500/30">
+                    <h4 className="text-blue-300 font-bold text-lg mb-2 flex items-center">
+                      <span className="mr-2 text-xl">📖</span> Chi tiết
+                    </h4>
+                    <p className="text-blue-200 text-sm leading-relaxed">
+                      {selectedStop.details}
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 p-4 rounded-2xl border border-purple-500/30">
+                    <h4 className="text-purple-300 font-bold text-lg mb-2 flex items-center">
+                      <span className="mr-2 text-xl">⭐</span> Ý nghĩa
+                    </h4>
+                    <p className="text-purple-200 text-sm leading-relaxed">
+                      {selectedStop.significance}
+                    </p>
+                  </div>
+
+                  {selectedStop.historicalContext && (
+                    <div className="bg-gradient-to-r from-indigo-900/30 to-blue-900/30 p-4 rounded-2xl border border-indigo-500/30">
+                      <h4 className="text-indigo-300 font-bold text-lg mb-2 flex items-center">
+                        <span className="mr-2 text-xl">🌏</span> Bối cảnh
+                      </h4>
+                      <p className="text-blue-200 text-sm leading-relaxed">
+                        {selectedStop.historicalContext}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
-            )}
 
-            {/* Content - Single Column Centered */}
-            <div className="space-y-6 max-w-4xl mx-auto">
-              <div className="bg-gradient-to-r from-yellow-900/20 to-orange-900/20 p-6 rounded-2xl border border-yellow-500/30">
-                <h4 className="text-yellow-300 font-bold text-2xl mb-3 flex items-center justify-center">
-                  <span className="mr-3 text-3xl">📍</span> Sự kiện
-                </h4>
-                <p className="text-blue-100 text-xl leading-relaxed text-center">
-                  {selectedStop.event}
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 p-6 rounded-2xl border border-blue-500/30">
-                <h4 className="text-blue-300 font-bold text-2xl mb-3 flex items-center justify-center">
-                  <span className="mr-3 text-3xl">📖</span> Chi tiết
-                </h4>
-                <p className="text-blue-200 text-lg leading-relaxed text-center">
-                  {selectedStop.details}
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 p-6 rounded-2xl border border-purple-500/30">
-                <h4 className="text-purple-300 font-bold text-2xl mb-3 flex items-center justify-center">
-                  <span className="mr-3 text-3xl">⭐</span> Ý nghĩa
-                </h4>
-                <p className="text-purple-200 text-lg leading-relaxed text-center">
-                  {selectedStop.significance}
-                </p>
-              </div>
-
-              {selectedStop.historicalContext && (
-                <div className="bg-gradient-to-r from-indigo-900/30 to-blue-900/30 p-6 rounded-2xl border border-indigo-500/30">
-                  <h4 className="text-indigo-300 font-bold text-2xl mb-3 flex items-center justify-center">
-                    <span className="mr-3 text-3xl">🌏</span> Bối cảnh lịch sử
-                  </h4>
-                  <p className="text-blue-200 text-lg leading-relaxed text-center">
-                    {selectedStop.historicalContext}
-                  </p>
+              {/* Character Age Indicator */}
+              <div className="flex items-center justify-center space-x-3 pt-6 mt-6 border-t border-blue-500/20">
+                <span className="text-blue-300 text-sm font-semibold">
+                  Giai đoạn:
+                </span>
+                <div className="flex space-x-2">
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      characterAge === "young"
+                        ? "bg-green-500/30 text-green-300 border-2 border-green-500"
+                        : "bg-gray-700/30 text-gray-400 border border-gray-600"
+                    }`}
+                  >
+                    Trẻ
+                  </span>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      characterAge === "middle"
+                        ? "bg-blue-500/30 text-blue-300 border-2 border-blue-500"
+                        : "bg-gray-700/30 text-gray-400 border border-gray-600"
+                    }`}
+                  >
+                    Trung niên
+                  </span>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      characterAge === "old"
+                        ? "bg-purple-500/30 text-purple-300 border-2 border-purple-500"
+                        : "bg-gray-700/30 text-gray-400 border border-gray-600"
+                    }`}
+                  >
+                    Trưởng thành
+                  </span>
                 </div>
-              )}
-            </div>
-
-            {/* Character Age Indicator - Centered */}
-            <div className="flex items-center justify-center space-x-3 pt-8 mt-8 border-t border-blue-500/20">
-              <span className="text-blue-300 text-lg font-semibold">
-                Giai đoạn cuộc đời:
-              </span>
-              <div className="flex space-x-3">
-                <span
-                  className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                    characterAge === "young"
-                      ? "bg-green-500/30 text-green-300 border-2 border-green-500 scale-110"
-                      : "bg-gray-700/30 text-gray-400 border border-gray-600"
-                  }`}
-                >
-                  Trẻ (21-34 tuổi)
-                </span>
-                <span
-                  className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                    characterAge === "middle"
-                      ? "bg-blue-500/30 text-blue-300 border-2 border-blue-500 scale-110"
-                      : "bg-gray-700/30 text-gray-400 border border-gray-600"
-                  }`}
-                >
-                  Trung niên (35-47 tuổi)
-                </span>
-                <span
-                  className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                    characterAge === "old"
-                      ? "bg-purple-500/30 text-purple-300 border-2 border-purple-500 scale-110"
-                      : "bg-gray-700/30 text-gray-400 border border-gray-600"
-                  }`}
-                >
-                  Trưởng thành (48-51 tuổi)
-                </span>
               </div>
             </div>
           </div>
