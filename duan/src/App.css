@@ -1,6 +1,13 @@
-* {
+/* Reset only specific elements, not all (*) to avoid conflicts with Tailwind */
+html,
+body {
   margin: 0;
   padding: 0;
+}
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -20,7 +27,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
     opacity: 0.3;
   }
@@ -31,7 +39,8 @@
 }
 
 @keyframes flagWave {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0px);
   }
   25% {

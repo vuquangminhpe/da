@@ -1,4 +1,4 @@
-import { soundArray } from '../assets/file_sound';
+import { soundArray } from "../assets/file_sound";
 
 export interface JourneyStop {
   id: number;
@@ -47,12 +47,11 @@ export const journeyStops: JourneyStop[] = [
     details:
       "Tàu dừng chân 3 ngày tại Singapore. Đây là lần đầu tiên Người được tận mắt chứng kiến một thương cảng quốc tế phát triển dưới sự cai trị thuộc địa của Anh. Người quan sát thấy sự đối lập rõ rệt: những tòa nhà cao tầng hiện đại bên cạnh khu ổ chuột nghèo khổ của người dân bản địa. Người Ấn Độ, người Mã Lai, người Hoa đều phải chịu sự phân biệt chủng tộc nghiêm ngặt.",
     significance: "Quan sát xã hội thuộc địa phương Đông",
-    imageUrl:
-      "https://hcmussh.edu.vn/img/news/24qKxm1lTiOU8LD1GACulAm-.jpeg", // Singapore skyline vintage
+    imageUrl: "https://hcmussh.edu.vn/img/news/24qKxm1lTiOU8LD1GACulAm-.jpeg", // Singapore skyline vintage
     historicalContext:
       "Singapore vào đầu thế kỷ 20 là trung tâm thương mại lớn nhất Đông Nam Á dưới quyền cai trị của Đế quốc Anh, nơi hội tụ nhiều dân tộc nhưng đều chịu áp bức của chủ nghĩa thực dân.",
     duration: 15,
-    sound: soundArray[1], // File âm thanh 2.mp3 
+    sound: soundArray[1], // File âm thanh 2.mp3
   },
   {
     id: 3,
@@ -251,7 +250,7 @@ export const journeyStops: JourneyStop[] = [
     alias: "Nguyễn Ái Quốc",
     significance: "Nâng cao trình độ lý luận cách mạng",
     imageUrl:
-      "https://hochiminh.vn/Uploads/2019/1/2/17/BH.310_resize.jpg", // Moscow Red Square
+      "https://cdn.i-scmp.com/sites/default/files/styles/1020x680/public/d8/images/canvas/2022/02/10/a96187f1-5c7d-491d-9c05-c07244a1dc8c_6ffe8d9c.jpg?itok=2h7tAhXR&v=1644490138", // Moscow Red Square
     historicalContext:
       "Liên Xô những năm 1920 là trung tâm của phong trào cộng sản thế giới, thu hút các nhà cách mạng từ khắp nơi đến học tập.",
     duration: 21,
@@ -270,7 +269,7 @@ export const journeyStops: JourneyStop[] = [
     alias: "Lý Thụy",
     significance: "Đào tạo thế hệ cách mạng đầu tiên của Việt Nam",
     imageUrl:
-      "https://hochiminh.vn/Uploads/2019/1/2/17/BH.760_resize.jpg", // Guangzhou
+      "https://cdn.i-scmp.com/sites/default/files/d8/images/canvas/2022/11/16/daf55f21-dd45-4856-a39c-8af6fa76bcec_b5b1d5ce.jpg", // Guangzhou
     historicalContext:
       "Quảng Châu 1924-1927 là trung tâm hợp tác Quốc-Cộng ở Trung Quốc, thu hút nhiều nhà cách mạng châu Á.",
     duration: 25,
@@ -288,7 +287,8 @@ export const journeyStops: JourneyStop[] = [
       "Sau cuộc đảo chính của Tưởng Giới Thạch (4/1927) thảm sát cộng sản ở Trung Quốc, Người phải rời Quảng Châu. Người sang Thái Lan, sinh sống tại Nakhon Phanom - vùng biên giới gần Việt Nam, nơi có cộng đồng người Việt sinh sống. Với tên gọi Thầu Chín, Người làm thầy thuốc đông y, vừa chữa bệnh cho dân vừa tuyên truyền cách mạng. Người xây dựng mạng lưới liên lạc với các đồng chí trong nước, chuẩn bị cho việc thành lập Đảng.",
     alias: "Thầu Chín",
     significance: "Mở rộng mạng lưới cách mạng ra khu vực",
-    imageUrl: "https://image.giacngo.vn/w770/Uploaded/2025/estnselxslt/2024_09_01/14a-8402.jpg",
+    imageUrl:
+      "https://image.giacngo.vn/w770/Uploaded/2025/estnselxslt/2024_09_01/14a-8402.jpg",
     historicalContext:
       "Đông Bắc Thái Lan có cộng đồng người Việt đông đảo, là địa điểm thuận lợi cho hoạt động bí mật.",
     duration: 18,
@@ -342,7 +342,8 @@ export const journeyStops: JourneyStop[] = [
       "Người trở lại Moskva, làm việc tại Quốc tế Cộng sản, theo dõi sát tình hình Đông Dương và thế giới. Người viết nhiều bài báo phân tích về chiến lược chống phát xít, về vấn đề dân tộc thuộc địa. Giai đoạn này, Người hoàn thiện tư tưởng về cách mạng Việt Nam, chuẩn bị cho giai đoạn mới khi chiến tranh thế giới sắp bùng nổ.",
     alias: "Lin / Linov",
     significance: "Hoàn thiện tư tưởng và đường lối cách mạng Việt Nam",
-    imageUrl: "https://cdn.giaoduc.net.vn/images/4567b617dad583be1e7afcde73e8465c10505e7ac00f72305556498cfcf3e8292985024b18d197e0d0bb2563de3bb9bd484a12abfa79a66dd59d31f9ee6f78bc/thu_do_moscow_nga_1.jpg",
+    imageUrl:
+      "https://cdn.giaoduc.net.vn/images/4567b617dad583be1e7afcde73e8465c10505e7ac00f72305556498cfcf3e8292985024b18d197e0d0bb2563de3bb9bd484a12abfa79a66dd59d31f9ee6f78bc/thu_do_moscow_nga_1.jpg",
     historicalContext:
       "Thập niên 1930, nguy cơ chiến tranh thế giới lần 2 đang đến gần. Phong trào cộng sản thế giới chuẩn bị đối đầu với phát xít.",
     duration: 13,

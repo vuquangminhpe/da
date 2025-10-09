@@ -700,10 +700,23 @@ function Earth({
     const stop = journeyStops[currentStopIndex];
     const [lon, lat] = stop.coordinates;
 
-    // FIX: Calculate rotation to FACE the location (front view, not back)
-    // We need to rotate so the location faces the camera (positive Z axis)
-    const targetRotationY = (lon * Math.PI) / 180; // Changed from negative
-    const targetRotationX = -(lat * Math.PI) / 180; // Changed sign
+    // SOLUTION: Calculate position vector first, then derive rotation from it
+    // This ensures we rotate based on actual 3D position, not geographic coordinates
+    const markerPosition = latLonToVector3(lat, lon, 1); // Get actual 3D position
+
+    // The marker is currently at position (x, y, z)
+    // We want to rotate it to face camera at (0, y', +z')
+    //
+    // For Y-axis rotation (horizontal):
+    // We want to eliminate X component and make Z positive
+    // If marker is at angle θ from Z-axis: θ = atan2(x, z)
+    // To bring it to Z-axis, rotate by -θ
+    const currentAngle = Math.atan2(markerPosition.x, markerPosition.z);
+    const targetRotationY = -currentAngle;
+
+    // For X-axis rotation (vertical tilt):
+    // Slight tilt based on Y position for better viewing angle
+    const targetRotationX = Math.asin(markerPosition.y) * 0.3; // Gentle tilt based on height
 
     // Animate Earth rotation
     const startRotationY = groupRef.current.rotation.y;
@@ -711,7 +724,7 @@ function Earth({
 
     // Camera zoom closer
     const startCameraZ = camera.position.z;
-    const targetCameraZ = 5.5; // Closer zoom for better view
+    const targetCameraZ = 8; // Closer zoom for better view
 
     const startTime = Date.now();
     const duration = 2000; // 2 seconds
@@ -735,7 +748,7 @@ function Earth({
         );
         groupRef.current.rotation.x = THREE.MathUtils.lerp(
           startRotationX,
-          targetRotationX * 0.3, // Gentle vertical tilt
+          targetRotationX, // Already calculated with tilt factor
           eased
         );
       }
