@@ -11,6 +11,9 @@ import HoChiMinhCharacter from "../characters/HoChiMinhCharacter";
 import BoatCharacter from "../characters/BoatCharacter";
 import SoldierCharacter from "../characters/SoldierCharacter";
 import VietnamFlag from "../characters/VietnamFlag";
+import VietnamFlagBackground from "../VietnamFlagBackground";
+import bhCopy4 from "../../assets/bh-Copy-4.jpg";
+import introSound from "../../assets/file_sound/Trang chủ.mp3";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,8 +29,116 @@ const Section1Journey = () => {
   const [showIntro, setShowIntro] = useState<boolean>(true);
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState<boolean>(false);
+  const [showStartOverlay, setShowStartOverlay] = useState<boolean>(true);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const popupTimeoutRef = useRef<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const stopAudioRef = useRef<HTMLAudioElement | null>(null); // Audio for journey stops
+  const audioTimeoutRef = useRef<number | null>(null); // Timeout for playing audio after rotation
+
+  // Function to go to next stop
+  const goToNextStop = () => {
+    if (currentStopIndex < journeyStops.length - 1) {
+      const nextIndex = currentStopIndex + 1;
+      setCurrentStopIndex(nextIndex);
+      setSelectedStop(journeyStops[nextIndex]);
+      
+      // Update character age
+      if (nextIndex < 7) {
+        setCharacterAge("young");
+      } else if (nextIndex < 16) {
+        setCharacterAge("middle");
+      } else {
+        setCharacterAge("old");
+      }
+      
+      // Update phase
+      const phaseIndex = journeyPhases.findIndex((phase) =>
+        phase.stops.includes(journeyStops[nextIndex].id)
+      );
+      if (phaseIndex !== -1) {
+        setCurrentPhase(phaseIndex);
+      }
+    }
+  };
+
+  // Function to go to previous stop
+  const goToPreviousStop = () => {
+    if (currentStopIndex > 0) {
+      const prevIndex = currentStopIndex - 1;
+      setCurrentStopIndex(prevIndex);
+      setSelectedStop(journeyStops[prevIndex]);
+      
+      // Update character age
+      if (prevIndex < 7) {
+        setCharacterAge("young");
+      } else if (prevIndex < 16) {
+        setCharacterAge("middle");
+      } else {
+        setCharacterAge("old");
+      }
+      
+      // Update phase
+      const phaseIndex = journeyPhases.findIndex((phase) =>
+        phase.stops.includes(journeyStops[prevIndex].id)
+      );
+      if (phaseIndex !== -1) {
+        setCurrentPhase(phaseIndex);
+      }
+    }
+  };
+
+  // Handle start overlay - play music on first interaction
+  const handleStartExperience = () => {
+    setShowStartOverlay(false);
+    
+    // Play audio after user interaction
+    if (audioRef.current) {
+      audioRef.current.volume = 0.5;
+      audioRef.current.currentTime = 0;
+      audioRef.current.play()
+        .then(() => {
+          setIsMusicPlaying(true);
+        })
+        .catch(error => {
+          console.log("Audio play failed:", error);
+          setIsMusicPlaying(false);
+        });
+    }
+  };
+
+  // Effect to handle intro music
+  useEffect(() => {
+    // Only manage pause/stop, not autoplay (handled by user interaction)
+    if (!showIntro && audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsMusicPlaying(false);
+    }
+    
+    // Cleanup: stop music when component unmounts
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
+  }, [showIntro]);
+
+  // Function to toggle music
+  const toggleMusic = () => {
+    if (audioRef.current) {
+      if (isMusicPlaying) {
+        audioRef.current.pause();
+        setIsMusicPlaying(false);
+      } else {
+        audioRef.current.play()
+          .then(() => setIsMusicPlaying(true))
+          .catch(error => console.log("Play failed:", error));
+      }
+    }
+  };
 
   // Effect to handle popup animation with delay
   useEffect(() => {
@@ -35,6 +146,15 @@ const Section1Journey = () => {
       // Clear any existing timeout
       if (popupTimeoutRef.current) {
         clearTimeout(popupTimeoutRef.current);
+      }
+      if (audioTimeoutRef.current) {
+        clearTimeout(audioTimeoutRef.current);
+      }
+
+      // Stop current audio if playing
+      if (stopAudioRef.current) {
+        stopAudioRef.current.pause();
+        stopAudioRef.current.currentTime = 0;
       }
 
       // Hide popup first with scale down animation
@@ -46,6 +166,19 @@ const Section1Journey = () => {
         setShowPopup(true);
         setIsTransitioning(false);
       }, 1500);
+
+      // Play audio AFTER globe rotation (1.5 seconds delay)
+      if (selectedStop.sound && stopAudioRef.current) {
+        audioTimeoutRef.current = window.setTimeout(() => {
+          if (stopAudioRef.current) {
+            stopAudioRef.current.src = selectedStop.sound!;
+            stopAudioRef.current.volume = 0.6;
+            stopAudioRef.current.play().catch(error => {
+              console.log("Stop audio play failed:", error);
+            });
+          }
+        }, 1500);
+      }
     } else {
       setShowPopup(false);
     }
@@ -54,11 +187,21 @@ const Section1Journey = () => {
       if (popupTimeoutRef.current) {
         clearTimeout(popupTimeoutRef.current);
       }
+      if (audioTimeoutRef.current) {
+        clearTimeout(audioTimeoutRef.current);
+      }
     };
   }, [currentStopIndex, selectedStop]);
 
   // Auto-play journey function
   const playJourney = () => {
+    // Stop intro music
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsMusicPlaying(false);
+    }
+    
     // Hide intro first
     setShowIntro(false);
 
@@ -69,6 +212,11 @@ const Section1Journey = () => {
       const tl = gsap.timeline({
         onComplete: () => {
           setIsAutoPlaying(false);
+          // Stop any playing stop audio
+          if (stopAudioRef.current) {
+            stopAudioRef.current.pause();
+            stopAudioRef.current.currentTime = 0;
+          }
           // Show victory sequence at the end
           showVictorySequence();
         },
@@ -97,10 +245,13 @@ const Section1Journey = () => {
 
           // Show stop info
           setSelectedStop(stop);
+
+          // Audio will be played by useEffect after 1.5s delay
         });
 
-        // Wait at each stop (3 seconds)
-        tl.to({}, { duration: 3 });
+        // Wait at each stop using custom duration (default 3 seconds if not specified)
+        const stopDuration = stop.duration || 3;
+        tl.to({}, { duration: stopDuration });
       });
 
       timelineRef.current = tl;
@@ -152,6 +303,11 @@ const Section1Journey = () => {
       if (timelineRef.current) {
         timelineRef.current.kill();
       }
+      // Clean up stop audio
+      if (stopAudioRef.current) {
+        stopAudioRef.current.pause();
+        stopAudioRef.current.currentTime = 0;
+      }
     };
   }, []);
 
@@ -160,6 +316,9 @@ const Section1Journey = () => {
       ref={sectionRef}
       className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900 py-20 px-4 relative overflow-hidden"
     >
+      {/* Hidden audio element for journey stop sounds */}
+      <audio ref={stopAudioRef} />
+      
       {/* Stars background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="stars"></div>
@@ -169,57 +328,300 @@ const Section1Journey = () => {
 
       {/* Intro Screen */}
       {showIntro && (
-        <div className="fixed inset-0 z-50 bg-gradient-to-b from-blue-950 via-slate-900 to-black flex items-center justify-center transition-opacity duration-1000">
-          <div className="text-center space-y-8">
-            <h1 className="text-6xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 animate-pulse">
-              1911
-            </h1>
-            <p className="text-2xl md:text-4xl text-blue-200">
-              Bác Hồ ra đi tìm đường cứu nước
-            </p>
-
-            {/* Boat and Character Animation */}
-            <div className="flex justify-center items-center py-12">
-              <svg width="400" height="200" viewBox="0 0 400 200">
-                {/* Ocean waves */}
-                <path
-                  d="M0,150 Q50,140 100,150 T200,150 T300,150 T400,150"
-                  fill="none"
-                  stroke="#3b82f6"
-                  strokeWidth="3"
-                  opacity="0.6"
-                  className="wave-animation"
-                />
-                <path
-                  d="M0,160 Q50,150 100,160 T200,160 T300,160 T400,160"
-                  fill="none"
-                  stroke="#60a5fa"
-                  strokeWidth="2"
-                  opacity="0.4"
-                  className="wave-animation"
-                  style={{ animationDelay: "0.5s" }}
-                />
-
-                {/* Boat and Character */}
-                <g transform="translate(200, 120)">
-                  <BoatCharacter y={0} scale={1.5} className="boat-float" />
-                  <g transform="translate(0, -30)">
-                    <HoChiMinhCharacter
-                      age="young"
-                      scale={1.2}
-                      className="character-wave"
+        <div className="fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-1000 overflow-hidden">
+          {/* Background Music - Play once only */}
+          <audio ref={audioRef} src={introSound} />
+          
+          {/* Start Experience Overlay */}
+          {showStartOverlay && (
+            <div 
+              className="fixed inset-0 z-[70] flex items-center justify-center cursor-pointer"
+              style={{ 
+                background: 'linear-gradient(135deg, rgba(115, 1, 9, 0.95) 0%, rgba(0, 0, 0, 0.98) 100%)'
+              }}
+              onClick={handleStartExperience}
+            >
+              <div className="text-center space-y-8 px-8 animate-pulse">
+                {/* Large Vietnam Star */}
+                <div className="flex justify-center mb-6">
+                  <svg className="w-32 h-32 animate-spin-slow" viewBox="0 0 50 50">
+                    <polygon
+                      points="25,5 29.4,18.1 42.5,18.1 32.1,25.8 36.8,40.5 25,32.5 13.2,40.5 17.9,25.8 7.5,18.1 20.6,18.1"
+                      fill="var(--vietnam-yellow)"
+                      style={{ filter: 'drop-shadow(0 0 20px var(--vietnam-yellow))' }}
                     />
-                  </g>
-                </g>
+                  </svg>
+                </div>
+                
+                {/* Text */}
+                <div className="space-y-4">
+                  <h2 
+                    className="text-5xl md:text-7xl font-black"
+                    style={{ 
+                      fontFamily: 'var(--font-heading)',
+                      color: 'var(--vietnam-yellow)',
+                      textShadow: '0 0 30px rgba(255, 235, 211, 0.5)'
+                    }}
+                  >
+                    NHẤN ĐỂ BẮT ĐẦU
+                  </h2>
+                  
+                  <p 
+                    className="text-xl md:text-2xl"
+                    style={{ 
+                      fontFamily: 'var(--font-body)',
+                      color: 'var(--vietnam-white)',
+                      opacity: 0.9
+                    }}
+                  >
+                    Click anywhere to start the journey
+                  </p>
+                  
+                  {/* Click icon */}
+                  <div className="mt-8 flex justify-center">
+                    <svg className="w-16 h-16 animate-bounce" fill="var(--vietnam-yellow)" viewBox="0 0 24 24">
+                      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Music Control Button */}
+          <button
+            onClick={toggleMusic}
+            className="fixed top-4 right-4 z-[60] p-3 rounded-full shadow-2xl hover:scale-110 transition-all duration-300"
+            style={{ 
+              background: `linear-gradient(135deg, var(--vietnam-red) 0%, #8B0000 100%)`,
+              border: `2px solid var(--vietnam-yellow)`,
+            }}
+            aria-label="Toggle music"
+          >
+            {isMusicPlaying ? (
+              <svg className="w-6 h-6" fill="var(--vietnam-yellow)" viewBox="0 0 24 24">
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
               </svg>
+            ) : (
+              <svg className="w-6 h-6" fill="var(--vietnam-yellow)" viewBox="0 0 24 24">
+                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+              </svg>
+            )}
+          </button>
+          
+          {/* Vietnam Flag Background */}
+          <VietnamFlagBackground />
+          
+          {/* Content Container */}
+          <div className="relative z-10 text-center space-y-8 px-8 max-w-7xl mx-auto">
+            {/* Hero Image Section */}
+            <div className="flex justify-center mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <div className="relative">
+                <div className="w-80 h-80 md:w-96 md:h-96 rounded-full overflow-hidden border-4 shadow-2xl"
+                     style={{ borderColor: 'var(--vietnam-yellow)' }}>
+                  <img 
+                    src={bhCopy4}
+                    alt="Khởi hành năm 1911"
+                    className="w-full h-full object-cover object-center"
+                    style={{ 
+                      filter: 'contrast(110%) brightness(105%) saturate(95%)',
+                      objectPosition: 'center center'
+                    }}
+                  />
+                </div>
+                
+                {/* Decorative ring around image */}
+                <div className="absolute inset-0 rounded-full border-2 border-opacity-30 animate-pulse"
+                     style={{ borderColor: 'var(--vietnam-yellow)' }}></div>
+                
+                {/* Floating star decorations */}
+                <div className="absolute -top-4 -right-4">
+                  <svg className="w-12 h-12 animate-pulse" viewBox="0 0 50 50">
+                    <polygon
+                      points="25,5 29.4,18.1 42.5,18.1 32.1,25.8 36.8,40.5 25,32.5 13.2,40.5 17.9,25.8 7.5,18.1 20.6,18.1"
+                      fill="var(--vietnam-yellow)"
+                      style={{ filter: 'drop-shadow(0 0 8px var(--vietnam-yellow))' }}
+                    />
+                  </svg>
+                </div>
+                
+                <div className="absolute -bottom-2 -left-4">
+                  <svg className="w-8 h-8 animate-pulse" viewBox="0 0 50 50" style={{ animationDelay: '1s' }}>
+                    <polygon
+                      points="25,5 29.4,18.1 42.5,18.1 32.1,25.8 36.8,40.5 25,32.5 13.2,40.5 17.9,25.8 7.5,18.1 20.6,18.1"
+                      fill="var(--vietnam-yellow)"
+                      style={{ filter: 'drop-shadow(0 0 6px var(--vietnam-yellow))' }}
+                    />
+                  </svg>
+                </div>
+              </div>
             </div>
 
-            <button
-              onClick={playJourney}
-              className="px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold text-xl rounded-full shadow-2xl hover:scale-110 transition-all duration-300"
-            >
-              Bắt đầu hành trình
-            </button>
+            {/* Main Title */}
+            <div className="space-y-4">
+              <h1 
+                className="text-7xl md:text-9xl font-black animate-shimmer animate-fade-in-up"
+                style={{ 
+                  fontFamily: 'var(--font-heading)',
+                  animationDelay: '0.5s',
+                  fontSize: 'clamp(4rem, 15vw, 8rem)'
+                }}
+              >
+                1911
+              </h1>
+              <div className="w-32 h-1 mx-auto rounded-full animate-fade-in-up" 
+                   style={{ 
+                     background: 'linear-gradient(90deg, var(--vietnam-red), var(--vietnam-yellow), var(--vietnam-red))',
+                     animationDelay: '1s'
+                   }}>
+              </div>
+            </div>
+
+            {/* Subtitle */}
+            <div className="space-y-6">
+              <h2 
+                className="text-3xl md:text-5xl font-bold text-white animate-fade-in-up leading-tight"
+                style={{ 
+                  fontFamily: 'var(--font-heading)',
+                  animationDelay: '1.5s',
+                  textShadow: '2px 2px 4px rgba(115, 1, 9, 0.8)'
+                }}
+              >
+                HÀNH TRÌNH TÌM ĐƯỜNG CỨU NƯỚC
+              </h2>
+              
+              {/* Quote from Ho Chi Minh */}
+              <blockquote className="animate-fade-in-up" style={{ animationDelay: '1.8s' }}>
+                <p 
+                  className="text-lg md:text-xl italic font-medium leading-relaxed"
+                  style={{ 
+                    fontFamily: 'var(--font-body)',
+                    color: 'var(--vietnam-yellow)',
+                    textShadow: '1px 1px 3px rgba(0, 0, 0, 0.8)'
+                  }}
+                >
+                  "Tôi đi tìm đường cứu nước"
+                </p>
+                <cite className="text-sm opacity-80 mt-2 block" style={{ color: 'var(--vietnam-white)' }}>
+                  - Nguyễn Tất Thành, 1911
+                </cite>
+              </blockquote>
+              
+              <p 
+                className="text-xl md:text-2xl animate-fade-in-up"
+                style={{ 
+                  fontFamily: 'var(--font-body)',
+                  color: 'var(--vietnam-yellow)',
+                  animationDelay: '2s',
+                  textShadow: '1px 1px 3px rgba(0, 0, 0, 0.8)'
+                }}
+              >
+                30 năm • 20 quốc gia • 6 châu lục
+              </p>
+            </div>
+
+            {/* Character and Boat Animation - Smaller */}
+            <div className="flex justify-center items-center py-4 animate-fade-in-up" style={{ animationDelay: '2.5s' }}>
+              <div className="relative">
+                <svg width="300" height="150" viewBox="0 0 300 150" className="drop-shadow-xl">
+                  {/* Stylized ocean waves */}
+                  <defs>
+                    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style={{ stopColor: 'var(--vietnam-red)', stopOpacity: 0.4 }} />
+                      <stop offset="50%" style={{ stopColor: 'var(--vietnam-yellow)', stopOpacity: 0.6 }} />
+                      <stop offset="100%" style={{ stopColor: 'var(--vietnam-red)', stopOpacity: 0.4 }} />
+                    </linearGradient>
+                  </defs>
+                  
+                  <path
+                    d="M0,100 Q75,85 150,100 T300,100"
+                    fill="none"
+                    stroke="url(#waveGradient)"
+                    strokeWidth="3"
+                    className="animate-flag-wave"
+                  />
+                  <path
+                    d="M0,110 Q75,95 150,110 T300,110"
+                    fill="none"
+                    stroke="url(#waveGradient)"
+                    strokeWidth="2"
+                    opacity="0.7"
+                    className="animate-flag-wave"
+                    style={{ animationDelay: "0.5s" }}
+                  />
+
+                  {/* Boat and Character - Smaller */}
+                  <g transform="translate(150, 80)" className="animate-float">
+                    <BoatCharacter y={0} scale={0.8} className="boat-float" />
+                    <g transform="translate(0, -25)">
+                      <HoChiMinhCharacter
+                        age="young"
+                        scale={0.7}
+                        className="character-wave"
+                      />
+                    </g>
+                  </g>
+
+                  {/* Decorative elements */}
+                  <circle cx="60" cy="30" r="1.5" fill="var(--vietnam-yellow)" opacity="0.8" className="animate-pulse" />
+                  <circle cx="240" cy="40" r="1" fill="var(--vietnam-yellow)" opacity="0.6" className="animate-pulse" style={{ animationDelay: '1s' }} />
+                </svg>
+              </div>
+            </div>
+
+            {/* Call to Action Button */}
+            <div className="animate-fade-in-up" style={{ animationDelay: '3s', transform: 'translateY(-10px)',  }}>
+              <button
+                onClick={playJourney}
+                className="group relative px-12 py-4 font-bold text-xl rounded-full shadow-2xl hover:scale-110 transition-all duration-300 overflow-hidden mb-8"
+                style={{ 
+                  fontFamily: 'var(--font-body)',
+                  background: `linear-gradient(135deg, var(--vietnam-red) 0%, #8B0000 50%, var(--vietnam-red) 100%)`,
+                  color: 'var(--vietnam-yellow)',
+                  border: `2px solid var(--vietnam-yellow)`,
+                  textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)'
+                }}
+              >
+                <span className="relative z-10 flex items-center gap-3">
+                  <span>🚢</span>
+                  BẮT ĐẦU HÀNH TRÌNH
+                  <span>⭐</span>
+                </span>
+                
+                {/* Button hover effect */}
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{
+                    background: `linear-gradient(135deg, var(--vietnam-yellow) 0%, #FFD700 50%, var(--vietnam-yellow) 100%)`
+                  }}
+                ></div>
+              </button>
+              
+              {/* Subtitle under button */}
+              <p 
+                className="text-sm opacity-80"
+                style={{ 
+                  fontFamily: 'var(--font-body)',
+                  color: 'var(--vietnam-yellow)'
+                }}
+              >
+                Khám phá 30 năm tìm đường cứu nước của Chủ tịch Hồ Chí Minh
+              </p>
+            </div>
+          </div>
+
+          {/* Decorative corner elements */}
+          <div className="absolute top-8 left-8 w-16 h-16 opacity-20">
+            <VietnamFlag x={0} y={0} scale={0.8} waving={true} />
+          </div>
+          <div className="absolute top-8 right-8 w-16 h-16 opacity-20">
+            <VietnamFlag x={0} y={0} scale={0.8} waving={true} />
+          </div>
+          <div className="absolute bottom-8 left-8 w-16 h-16 opacity-20">
+            <VietnamFlag x={0} y={0} scale={0.8} waving={true} />
+          </div>
+          <div className="absolute bottom-8 right-8 w-16 h-16 opacity-20">
+            <VietnamFlag x={0} y={0} scale={0.8} waving={true} />
           </div>
         </div>
       )}
@@ -481,6 +883,53 @@ const Section1Journey = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Navigation Arrow Buttons */}
+        {currentStopIndex > 0 && (
+          <button
+            onClick={goToPreviousStop}
+            className="fixed left-4 top-1/2 -translate-y-1/2 z-30 bg-[var(--vietnam-red)] border-2 border-[var(--vietnam-yellow)] text-[var(--vietnam-yellow)] rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:bg-[#8a0109] hover:scale-110 transition-all duration-300"
+            aria-label="Previous Stop"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={3}
+              stroke="currentColor"
+              className="w-7 h-7"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
+            </svg>
+          </button>
+        )}
+
+        {currentStopIndex < journeyStops.length - 1 && (
+          <button
+            onClick={goToNextStop}
+            className="fixed right-4 top-1/2 -translate-y-1/2 z-30 bg-[var(--vietnam-red)] border-2 border-[var(--vietnam-yellow)] text-[var(--vietnam-yellow)] rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:bg-[#8a0109] hover:scale-110 transition-all duration-300"
+            aria-label="Next Stop"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={3}
+              stroke="currentColor"
+              className="w-7 h-7"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </button>
         )}
 
         {/* Journey Timeline */}

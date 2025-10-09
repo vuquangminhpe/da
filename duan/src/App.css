@@ -1,13 +1,53 @@
 * {
   margin: 0;
   padding: 0;
-
   box-sizing: border-box;
 }
 
 #root {
   width: 100%;
   min-height: 100vh;
+}
+
+/* Custom animations for Vietnam flag */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-20px);
+    opacity: 0.7;
+  }
+}
+
+@keyframes flagWave {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  25% {
+    transform: translateX(2px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-flag-wave {
+  animation: flagWave 3s ease-in-out infinite;
 }
 
 /* Animation for sliding up from bottom */
@@ -56,4 +96,57 @@
 
 .animate-scale-down {
   animation: scaleDown 0.4s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+/* Elegant text animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--vietnam-red) 0%,
+    var(--vietnam-yellow) 50%,
+    var(--vietnam-red) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Slow spin animation for star */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
 }

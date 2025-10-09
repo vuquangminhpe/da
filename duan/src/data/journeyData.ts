@@ -11,6 +11,8 @@ export interface JourneyStop {
   significance: string;
   imageUrl?: string; // URL to historical image
   historicalContext?: string; // Additional historical context
+  duration?: number; // Duration in seconds for this stop
+  sound?: string; // Path to audio file for this stop
 }
 
 export const journeyStops: JourneyStop[] = [
@@ -26,9 +28,11 @@ export const journeyStops: JourneyStop[] = [
       'Thanh niên Nguyễn Tất Thành, 21 tuổi, lên tàu Amiral de Latouche-Tréville với tên Văn Ba, làm phụ bếp với mức lương 12 đồng bạc Đông Dương mỗi tháng. Trong tâm trí, Người mang theo khát vọng "đi tìm đường cứu nước". Theo hồi ký, Người nói với bạn bè trước khi đi: "Tôi đi để học phương pháp cứu nước rồi về giải phóng đồng bào".',
     significance: "Bước đầu tiên của hành trình 30 năm tìm đường cứu nước",
     imageUrl:
-      "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800", // Bến Nhà Rồng
+      "https://img.lsvn.vn/resize/th/upload/2025/06/05/ben-nha-rong-5622a-10193196.jpg", // Bến Nhà Rồng
     historicalContext:
       "Thời điểm này, Việt Nam đã bị Pháp cai trị hơn 50 năm. Các cuộc khởi nghĩa yêu nước trước đó như Cần Vương, Đông Du đều thất bại. Thanh niên Nguyễn Tất Thành quyết tâm tìm con đường mới.",
+    duration: 15, // Thời gian dừng tại điểm này (giây)
+    sound: "/src/assets/file_sound/1.mp3", // Đường dẫn file âm thanh
   },
   {
     id: 2,
@@ -42,9 +46,11 @@ export const journeyStops: JourneyStop[] = [
       "Tàu dừng chân 3 ngày tại Singapore. Đây là lần đầu tiên Người được tận mắt chứng kiến một thương cảng quốc tế phát triển dưới sự cai trị thuộc địa của Anh. Người quan sát thấy sự đối lập rõ rệt: những tòa nhà cao tầng hiện đại bên cạnh khu ổ chuột nghèo khổ của người dân bản địa. Người Ấn Độ, người Mã Lai, người Hoa đều phải chịu sự phân biệt chủng tộc nghiêm ngặt.",
     significance: "Quan sát xã hội thuộc địa phương Đông",
     imageUrl:
-      "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800", // Singapore skyline vintage
+      "https://hcmussh.edu.vn/img/news/24qKxm1lTiOU8LD1GACulAm-.jpeg", // Singapore skyline vintage
     historicalContext:
       "Singapore vào đầu thế kỷ 20 là trung tâm thương mại lớn nhất Đông Nam Á dưới quyền cai trị của Đế quốc Anh, nơi hội tụ nhiều dân tộc nhưng đều chịu áp bức của chủ nghĩa thực dân.",
+    duration: 15,
+    sound: "/src/assets/file_sound/2.mp3", 
   },
   {
     id: 3,
@@ -58,9 +64,11 @@ export const journeyStops: JourneyStop[] = [
       "Tại Colombo, Người có dịp tiếp xúc với công nhân cảng và lao động người Ceylon. Họ kể cho Người nghe về phong trào đấu tranh giành độc lập đang nhen nhóm dưới sự lãnh đạo của các nhà lãnh đạo dân tộc như Dharmapala. Người thấy rằng không chỉ riêng Việt Nam, mà nhiều dân tộc châu Á đang bị đô hộ đều khát khao độc lập tự do. Điều này càng củng cố niềm tin rằng con đường giải phóng dân tộc là vấn đề chung của toàn nhân loại.",
     significance: "Tìm hiểu về phong trào độc lập ở Nam Á",
     imageUrl:
-      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800", // Colombo harbor
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Environs_de_Saigon_-_Tuduc_-_Maison_commune.jpg/960px-Environs_de_Saigon_-_Tuduc_-_Maison_commune.jpg", // Colombo harbor
     historicalContext:
       "Ceylon (nay là Sri Lanka) đã bị Anh cai trị từ 1815. Phong trào dân tộc chủ nghĩa Ceylon đang lớn mạnh với yêu cầu tự trị.",
+    duration: 17,
+    sound: "/src/assets/file_sound/3.mp3",
   },
   {
     id: 4,
@@ -74,9 +82,11 @@ export const journeyStops: JourneyStop[] = [
       "Qua Djibouti, cửa ngõ biển Đỏ, Người chứng kiến cảnh tượng đau lòng của người châu Phi dưới ách thống trị của thực dân Pháp. Những người lao động da đen phải làm việc trong điều kiện khắc nghiệt dưới ánh nắng gay gắt của sa mạc, vác gánh nặng từ bến cảng lên kho. Tiền công bèo bọt không đủ nuôi sống gia đình. Cảnh tượng này khắc sâu trong tâm trí Người về bản chất tàn bạo của chủ nghĩa thực dân - không phân biệt lục địa hay màu da, chúng đều bóc lột người lao động một cách dã man.",
     significance: "Chứng kiến chế độ thực dân ở châu Phi",
     imageUrl:
-      "https://images.unsplash.com/photo-1570126646281-5ec88111777f?w=800", // Djibouti port
+      "https://upload.wikimedia.org/wikipedia/commons/4/49/Jetty_of_the_Port_of_Djibouti.jpg", // Djibouti port
     historicalContext:
       "Djibouti là thuộc địa của Pháp từ 1883, là cảng chiến lược quan trọng nối liền châu Âu với châu Á qua kênh Suez và biển Đỏ.",
+    duration: 18,
+    sound: "/src/assets/file_sound/4.mp3",
   },
   {
     id: 5,
@@ -90,9 +100,11 @@ export const journeyStops: JourneyStop[] = [
       "Kênh đào Suez - công trình kỳ vĩ nối liền Địa Trung Hải với biển Đỏ, rút ngắn hành trình từ châu Âu đến châu Á hàng nghìn hải lý. Người quan sát thấy hàng trăm con tàu lớn nhỏ từ khắp nơi trên thế giới cập cảng. Nhưng Người cũng nhận ra rằng công trình này, tuy tuyệt vời, nhưng lại phục vụ cho lợi ích của các nước đế quốc phương Tây. Người Ai Cập xây dựng nên kênh đào bằng máu và mồ hôi của mình, nhưng lợi nhuận lại về tay người Anh và Pháp.",
     significance: "Quan sát công trình kiến trúc hiện đại",
     imageUrl:
-      "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800", // Suez Canal
+      "https://upload.wikimedia.org/wikipedia/commons/f/fa/SuezCanalKantara.jpg", // Suez Canal
     historicalContext:
       "Kênh Suez mở cửa năm 1869, là huyết mạch thương mại giữa Đông và Tây, được kiểm soát bởi Anh và Pháp.",
+    duration: 17,
+    sound: "/src/assets/file_sound/5.mp3",
   },
   {
     id: 6,
@@ -106,9 +118,11 @@ export const journeyStops: JourneyStop[] = [
       'Sau 40 ngày vượt biển, tàu cập cảng Marseille, cảng biển lớn nhất nước Pháp bên bờ Địa Trung Hải. Đây là lần đầu tiên Người đặt chân lên đất nước "tông chủ" - đất nước của những kẻ thống trị Việt Nam. Tại đây, Người bắt đầu quan sát xã hội Pháp từ bên trong: xem những công nhân Pháp làm việc như thế nào, họ sống ra sao, họ có hạnh phúc không. Người muốn hiểu tại sao một dân tộc có nền văn minh cao như thế lại đi áp bức các dân tộc khác.',
     significance: "Bắt đầu tìm hiểu về nước Pháp từ bên trong",
     imageUrl:
-      "https://images.unsplash.com/photo-1599946347371-68eb71b16afc?w=800", // Marseille port
+      "https://www.ugvf.org/wp-content/uploads/2021/11/image-12-768x1023.png", // Marseille port
     historicalContext:
       "Marseille là cửa ngõ của đế quốc thực dân Pháp, nơi hàng hóa và con người từ các thuộc địa về tập trung.",
+    duration: 18,
+    sound: "/src/assets/file_sound/6.mp3",
   },
   {
     id: 7,
@@ -122,9 +136,11 @@ export const journeyStops: JourneyStop[] = [
       "Trong 5 năm tại London - trung tâm của đế quốc Anh hùng mạnh nhất thế giới lúc bấy giờ, Người làm việc tại khách sạn Drayton Court ở West Ealing (1912-1913) và Carlton Hotel ở Westminster (1913-1917). Người học tiếng Anh chăm chỉ, đọc sách báo, tham gia các cuộc họp của công nhân và sinh viên tiến bộ. Người gia nhập Hội người hải ngoại thuộc địa (Overseas Workers Association) và bắt đầu viết những bài báo đầu tiên về tình cảnh người Việt Nam dưới ách thực dân.",
     significance: "Tìm hiểu về xã hội tư bản phát triển nhất thời bấy giờ",
     imageUrl:
-      "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800", // London Big Ben
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Watson_House_de_fabriek_van_de_Gas_Light_%26_Coke_Company_in_Londen_Onderricht_a%2C_Bestanddeelnr_189-0083.jpg/1280px-Watson_House_de_fabriek_van_de_Gas_Light_%26_Coke_Company_in_Londen_Onderricht_a%2C_Bestanddeelnr_189-0083.jpg", // London Big Ben
     historicalContext:
       "London đầu thế kỷ 20 là trung tâm tài chính và chính trị của đế quốc Anh, cũng là nơi quy tụ nhiều tổ chức chính trị tiến bộ và phong trào công nhân.",
+    duration: 20,
+    sound: "/src/assets/file_sound/7.mp3",
   },
   {
     id: 8,
@@ -138,9 +154,11 @@ export const journeyStops: JourneyStop[] = [
       'Người đến New York vào mùa đông năm 1912. Làm việc tại khu Harlem - trung tâm văn hóa của cộng đồng người Mỹ gốc Phi. Tại đây, Người chứng kiến hai mặt của nước Mỹ: một bên là nền dân chủ tự do được tuyên truyền rầm rộ, một bên là sự phân biệt chủng tộc tàn khốc đối với người da đen. Người xem các luật Jim Crow, chứng kiến sự bất công về giáo dục, y tế, việc làm. Người tham gia các cuộc biểu tình đòi quyền công dân cho người da đen và học hỏi kinh nghiệm đấu tranh của họ. Người nhận ra rằng ngay cả ở "đất nước tự do", sự áp bức vẫn tồn tại.',
     significance: "Quan sát nền dân chủ Mỹ và vấn đề phân biệt chủng tộc",
     imageUrl:
-      "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800", // New York vintage
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Strike_2990272474_524b6f4c0d_o.jpg/1280px-Strike_2990272474_524b6f4c0d_o.jpg", // New York vintage
     historicalContext:
       "Đầu thế kỷ 20, phong trào đấu tranh giành quyền dân sự của người Mỹ gốc Phi đang lớn mạnh, chống lại các luật phân biệt chủng tộc Jim Crow.",
+    duration: 23,
+    sound: "/src/assets/file_sound/8.mp3",
   },
   {
     id: 9,
@@ -154,9 +172,11 @@ export const journeyStops: JourneyStop[] = [
       "Tại khách sạn Parker House nổi tiếng ở Boston, Người làm thợ bánh. Đây là khách sạn lâu đời và sang trọng, phục vụ tầng lớp thượng lưu. Trong khi làm việc, Người quan sát cuộc sống của giới quý tộc và tư sản giàu có, so sánh với cảnh nghèo khó của công nhân nhà bếp. Người thấy rõ sự bất bình đẳng sâu sắc trong xã hội tư bản. Người cũng tìm đến thư viện công cộng Boston - một trong những thư viện lớn nhất Mỹ - để đọc sách về lịch sử cách mạng, về các tư tưởng tiến bộ.",
     significance: "Trải nghiệm cuộc sống công nhân Mỹ",
     imageUrl:
-      "https://images.unsplash.com/photo-1572655256646-2ba6c3b9f6c0?w=800", // Boston
+      "https://ordi.vn/wp-content/uploads/2024/05/Boston-1-1024x768-768x576.png", // Boston
     historicalContext:
       "Boston là một trong những trung tâm văn hóa và giáo dục lớn nhất nước Mỹ, nơi có truyền thống cách mạng từ thời độc lập.",
+    duration: 19,
+    sound: "/src/assets/file_sound/9.mp3",
   },
   {
     id: 10,
@@ -171,9 +191,11 @@ export const journeyStops: JourneyStop[] = [
     alias: "Nguyễn Ái Quốc",
     significance: "Giai đoạn hình thành tư tưởng cách mạng ban đầu",
     imageUrl:
-      "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800", // Paris
+      "https://baotanglichsu.vn/DataFiles/Uploaded/image/data%20Hung/nguyen%20ai%20quoc/3.jpg", // Paris
     historicalContext:
       "Paris sau Thế chiến I là trung tâm của các phong trào chính trị tiến bộ, nơi tụ họp nhiều nhà cách mạng từ khắp thế giới.",
+    duration: 20,
+    sound: "/src/assets/file_sound/10.mp3",
   },
   {
     id: 11,
@@ -189,9 +211,11 @@ export const journeyStops: JourneyStop[] = [
     significance:
       "Lần đầu tiên tiếng nói Việt Nam vang lên trên đấu trường quốc tế",
     imageUrl:
-      "https://images.unsplash.com/photo-1575489272413-cb506258027e?w=800", // Versailles palace
+      "https://llct.1cdn.vn/2020/03/17/lyluanchinhtri.vn-home-media-k2-items-cache-_a4b386613794e4c7cd10e5b37246fd64_l.jpg", // Versailles palace
     historicalContext:
       "Hội nghị Versailles (1919) quyết định trật tự thế giới sau chiến tranh, nhưng vấn đề thuộc địa không được đề cập đúng mức.",
+    duration: 27,
+    sound: "/src/assets/file_sound/11.mp3",
   },
   {
     id: 12,
@@ -206,9 +230,11 @@ export const journeyStops: JourneyStop[] = [
     alias: "Nguyễn Ái Quốc",
     significance: "Tìm thấy con đường cứu nước: Chủ nghĩa Mác-Lênin",
     imageUrl:
-      "https://images.unsplash.com/photo-1581974206824-5659e46019e6?w=800", // Tours city
+      "https://bqllang.gov.vn/images/Thang_11.2013/19.11.2013/_nh_BH___-H_tours.gif", // Tours city
     historicalContext:
       "Đại hội Tours đánh dấu sự phân chia trong phong trào cộng sản quốc tế. Đa số đại biểu tán thành gia nhập Quốc tế III và thành lập Đảng Cộng sản Pháp.",
+    duration: 22,
+    sound: "/src/assets/file_sound/12.mp3",
   },
   {
     id: 13,
@@ -223,9 +249,11 @@ export const journeyStops: JourneyStop[] = [
     alias: "Nguyễn Ái Quốc",
     significance: "Nâng cao trình độ lý luận cách mạng",
     imageUrl:
-      "https://images.unsplash.com/photo-1513326738677-b964603b136d?w=800", // Moscow Red Square
+      "https://hochiminh.vn/Uploads/2019/1/2/17/BH.310_resize.jpg", // Moscow Red Square
     historicalContext:
       "Liên Xô những năm 1920 là trung tâm của phong trào cộng sản thế giới, thu hút các nhà cách mạng từ khắp nơi đến học tập.",
+    duration: 21,
+    sound: "/src/assets/file_sound/13.mp3",
   },
   {
     id: 14,
@@ -240,9 +268,11 @@ export const journeyStops: JourneyStop[] = [
     alias: "Lý Thụy",
     significance: "Đào tạo thế hệ cách mạng đầu tiên của Việt Nam",
     imageUrl:
-      "https://images.unsplash.com/photo-1568632234157-ce7aecd03d0d?w=800", // Guangzhou
+      "https://hochiminh.vn/Uploads/2019/1/2/17/BH.760_resize.jpg", // Guangzhou
     historicalContext:
       "Quảng Châu 1924-1927 là trung tâm hợp tác Quốc-Cộng ở Trung Quốc, thu hút nhiều nhà cách mạng châu Á.",
+    duration: 25,
+    sound: "/src/assets/file_sound/14.mp3",
   },
   {
     id: 15,
@@ -256,9 +286,11 @@ export const journeyStops: JourneyStop[] = [
       "Sau cuộc đảo chính của Tưởng Giới Thạch (4/1927) thảm sát cộng sản ở Trung Quốc, Người phải rời Quảng Châu. Người sang Thái Lan, sinh sống tại Nakhon Phanom - vùng biên giới gần Việt Nam, nơi có cộng đồng người Việt sinh sống. Với tên gọi Thầu Chín, Người làm thầy thuốc đông y, vừa chữa bệnh cho dân vừa tuyên truyền cách mạng. Người xây dựng mạng lưới liên lạc với các đồng chí trong nước, chuẩn bị cho việc thành lập Đảng.",
     alias: "Thầu Chín",
     significance: "Mở rộng mạng lưới cách mạng ra khu vực",
-    imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
+    imageUrl: "https://image.giacngo.vn/w770/Uploaded/2025/estnselxslt/2024_09_01/14a-8402.jpg",
     historicalContext:
       "Đông Bắc Thái Lan có cộng đồng người Việt đông đảo, là địa điểm thuận lợi cho hoạt động bí mật.",
+    duration: 18,
+    sound: "/src/assets/file_sound/15.mp3",
   },
   {
     id: 16,
@@ -273,9 +305,11 @@ export const journeyStops: JourneyStop[] = [
     alias: "Nguyễn Ái Quốc",
     significance: "Sự kiện lịch sử vĩ đại - Ra đời Đảng Cộng sản Việt Nam",
     imageUrl:
-      "https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=800",
+      "https://media.vietnamplus.vn/images/7255a701687d11cb8c6bbc58a6c8078538b253fda71f099c6cfd37729a9151786f9e25f398caf3266dc7c9259ae2ac064f9efb0c8972265f49d8f86164867992/0406_hong_kong.jpg", // Hong Kong vintage
     historicalContext:
       "Việt Nam cần một đảng cách mạng chân chính để lãnh đạo phong trào giải phóng dân tộc. Sự ra đời của Đảng là tất yếu khách quan.",
+    duration: 20,
+    sound: "/src/assets/file_sound/16.mp3",
   },
   {
     id: 17,
@@ -288,9 +322,11 @@ export const journeyStops: JourneyStop[] = [
     details:
       "Nhờ luật sư Anh tiến bộ Frank Loseby bào chữa, Người được thả khỏi nhà tù Hong Kong. Để thoát khỏi sự truy lùng của mật thám Pháp, Người giả tin đồn về cái chết của mình, sau đó bí mật sang Thượng Hải. Tại đây, Người tiếp tục hoạt động bí mật, liên lạc với Quốc tế Cộng sản, chuẩn bị cho chặng đường tiếp theo.",
     significance: "Thoát khỏi sự truy lùng của thực dân Pháp",
-    imageUrl: "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?w=800",
+    imageUrl: "https://hochiminh.vn/Uploads/2019/1/2/17/BH.416_resize.jpg",
     historicalContext:
       "Thượng Hải thập niên 1930 là thành phố phức tạp với nhiều thế lực, thuận lợi cho hoạt động bí mật.",
+    duration: 13,
+    sound: "/src/assets/file_sound/17.mp3",
   },
   {
     id: 18,
@@ -304,9 +340,11 @@ export const journeyStops: JourneyStop[] = [
       "Người trở lại Moskva, làm việc tại Quốc tế Cộng sản, theo dõi sát tình hình Đông Dương và thế giới. Người viết nhiều bài báo phân tích về chiến lược chống phát xít, về vấn đề dân tộc thuộc địa. Giai đoạn này, Người hoàn thiện tư tưởng về cách mạng Việt Nam, chuẩn bị cho giai đoạn mới khi chiến tranh thế giới sắp bùng nổ.",
     alias: "Lin / Linov",
     significance: "Hoàn thiện tư tưởng và đường lối cách mạng Việt Nam",
-    imageUrl: "https://images.unsplash.com/photo-1547448415-e9f5b28e570d?w=800",
+    imageUrl: "https://cdn.giaoduc.net.vn/images/4567b617dad583be1e7afcde73e8465c10505e7ac00f72305556498cfcf3e8292985024b18d197e0d0bb2563de3bb9bd484a12abfa79a66dd59d31f9ee6f78bc/thu_do_moscow_nga_1.jpg",
     historicalContext:
       "Thập niên 1930, nguy cơ chiến tranh thế giới lần 2 đang đến gần. Phong trào cộng sản thế giới chuẩn bị đối đầu với phát xít.",
+    duration: 13,
+    sound: "/src/assets/file_sound/18.mp3",
   },
   {
     id: 19,
@@ -320,9 +358,11 @@ export const journeyStops: JourneyStop[] = [
       "Tại căn cứ địa Diên An của Đảng Cộng sản Trung Quốc, Người làm cố vấn cho mặt trận chống Nhật. Người theo dõi sát diễn biến chiến tranh thế giới, phân tích tình hình Đông Dương. Khi Pháp đầu hàng Đức (1940), Nhật chiếm Đông Dương, Người nhận định đây là thời cơ của cách mạng Việt Nam. Người bắt đầu chuẩn bị kế hoạch trở về Tổ quốc.",
     significance: "Chuẩn bị cho cuộc cách mạng giải phóng dân tộc",
     imageUrl:
-      "https://images.unsplash.com/photo-1564479116354-c6650f7e3f84?w=800",
+      "https://cand.com.vn/Files/Image/linhchi/2017/06/13/ca17579b-a395-436e-a08c-03ef6bc4b12e.jpg",
     historicalContext:
       "Chiến tranh thế giới lần 2 bùng nổ, tạo điều kiện cho các phong trào giải phóng dân tộc ở châu Á.",
+    duration: 14,
+    sound: "/src/assets/file_sound/19.mp3",
   },
   {
     id: 20,
@@ -338,9 +378,11 @@ export const journeyStops: JourneyStop[] = [
     significance:
       "Kết thúc hành trình tìm đường, bắt đầu trực tiếp lãnh đạo cách mạng",
     imageUrl:
-      "https://images.unsplash.com/photo-1528127269322-539801943592?w=800",
+      "https://tuyengiaocaobang.vn/uploads/news/2024_01/image-20240126143953-1.png",
     historicalContext:
       "1941, Nhật-Pháp thống trị song song ở Đông Dương. Nhân dân Việt Nam chịu đựng 'hai tầng áp bức'. Thời cơ cách mạng đã chín muồi.",
+    duration: 24,
+    sound: "/src/assets/file_sound/20.mp3",
   },
 ];
 
