@@ -88,7 +88,7 @@ const Section1Journey = () => {
       }
     }
   };
-
+ // something
   // Handle start overlay - play music on first interaction
   const handleStartExperience = () => {
     setShowStartOverlay(false);
