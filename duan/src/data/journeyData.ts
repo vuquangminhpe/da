@@ -1,3 +1,5 @@
+import { soundArray } from '../assets/file_sound';
+
 export interface JourneyStop {
   id: number;
   date: string;
@@ -32,7 +34,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Thời điểm này, Việt Nam đã bị Pháp cai trị hơn 50 năm. Các cuộc khởi nghĩa yêu nước trước đó như Cần Vương, Đông Du đều thất bại. Thanh niên Nguyễn Tất Thành quyết tâm tìm con đường mới.",
     duration: 15, // Thời gian dừng tại điểm này (giây)
-    sound: "/src/assets/file_sound/1.mp3", // Đường dẫn file âm thanh
+    sound: soundArray[0], // File âm thanh 1.mp3
   },
   {
     id: 2,
@@ -50,7 +52,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Singapore vào đầu thế kỷ 20 là trung tâm thương mại lớn nhất Đông Nam Á dưới quyền cai trị của Đế quốc Anh, nơi hội tụ nhiều dân tộc nhưng đều chịu áp bức của chủ nghĩa thực dân.",
     duration: 15,
-    sound: "/src/assets/file_sound/2.mp3", 
+    sound: soundArray[1], // File âm thanh 2.mp3 
   },
   {
     id: 3,
@@ -68,7 +70,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Ceylon (nay là Sri Lanka) đã bị Anh cai trị từ 1815. Phong trào dân tộc chủ nghĩa Ceylon đang lớn mạnh với yêu cầu tự trị.",
     duration: 17,
-    sound: "/src/assets/file_sound/3.mp3",
+    sound: soundArray[2],
   },
   {
     id: 4,
@@ -86,7 +88,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Djibouti là thuộc địa của Pháp từ 1883, là cảng chiến lược quan trọng nối liền châu Âu với châu Á qua kênh Suez và biển Đỏ.",
     duration: 18,
-    sound: "/src/assets/file_sound/4.mp3",
+    sound: soundArray[3],
   },
   {
     id: 5,
@@ -104,7 +106,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Kênh Suez mở cửa năm 1869, là huyết mạch thương mại giữa Đông và Tây, được kiểm soát bởi Anh và Pháp.",
     duration: 17,
-    sound: "/src/assets/file_sound/5.mp3",
+    sound: soundArray[4],
   },
   {
     id: 6,
@@ -122,7 +124,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Marseille là cửa ngõ của đế quốc thực dân Pháp, nơi hàng hóa và con người từ các thuộc địa về tập trung.",
     duration: 18,
-    sound: "/src/assets/file_sound/6.mp3",
+    sound: soundArray[5],
   },
   {
     id: 7,
@@ -140,7 +142,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "London đầu thế kỷ 20 là trung tâm tài chính và chính trị của đế quốc Anh, cũng là nơi quy tụ nhiều tổ chức chính trị tiến bộ và phong trào công nhân.",
     duration: 20,
-    sound: "/src/assets/file_sound/7.mp3",
+    sound: soundArray[6],
   },
   {
     id: 8,
@@ -158,7 +160,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Đầu thế kỷ 20, phong trào đấu tranh giành quyền dân sự của người Mỹ gốc Phi đang lớn mạnh, chống lại các luật phân biệt chủng tộc Jim Crow.",
     duration: 23,
-    sound: "/src/assets/file_sound/8.mp3",
+    sound: soundArray[7],
   },
   {
     id: 9,
@@ -176,7 +178,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Boston là một trong những trung tâm văn hóa và giáo dục lớn nhất nước Mỹ, nơi có truyền thống cách mạng từ thời độc lập.",
     duration: 19,
-    sound: "/src/assets/file_sound/9.mp3",
+    sound: soundArray[8],
   },
   {
     id: 10,
@@ -195,7 +197,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Paris sau Thế chiến I là trung tâm của các phong trào chính trị tiến bộ, nơi tụ họp nhiều nhà cách mạng từ khắp thế giới.",
     duration: 20,
-    sound: "/src/assets/file_sound/10.mp3",
+    sound: soundArray[9],
   },
   {
     id: 11,
@@ -215,7 +217,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Hội nghị Versailles (1919) quyết định trật tự thế giới sau chiến tranh, nhưng vấn đề thuộc địa không được đề cập đúng mức.",
     duration: 27,
-    sound: "/src/assets/file_sound/11.mp3",
+    sound: soundArray[10],
   },
   {
     id: 12,
@@ -234,7 +236,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Đại hội Tours đánh dấu sự phân chia trong phong trào cộng sản quốc tế. Đa số đại biểu tán thành gia nhập Quốc tế III và thành lập Đảng Cộng sản Pháp.",
     duration: 22,
-    sound: "/src/assets/file_sound/12.mp3",
+    sound: soundArray[11],
   },
   {
     id: 13,
@@ -253,7 +255,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Liên Xô những năm 1920 là trung tâm của phong trào cộng sản thế giới, thu hút các nhà cách mạng từ khắp nơi đến học tập.",
     duration: 21,
-    sound: "/src/assets/file_sound/13.mp3",
+    sound: soundArray[12],
   },
   {
     id: 14,
@@ -272,7 +274,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Quảng Châu 1924-1927 là trung tâm hợp tác Quốc-Cộng ở Trung Quốc, thu hút nhiều nhà cách mạng châu Á.",
     duration: 25,
-    sound: "/src/assets/file_sound/14.mp3",
+    sound: soundArray[13],
   },
   {
     id: 15,
@@ -290,7 +292,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Đông Bắc Thái Lan có cộng đồng người Việt đông đảo, là địa điểm thuận lợi cho hoạt động bí mật.",
     duration: 18,
-    sound: "/src/assets/file_sound/15.mp3",
+    sound: soundArray[14],
   },
   {
     id: 16,
@@ -309,7 +311,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Việt Nam cần một đảng cách mạng chân chính để lãnh đạo phong trào giải phóng dân tộc. Sự ra đời của Đảng là tất yếu khách quan.",
     duration: 20,
-    sound: "/src/assets/file_sound/16.mp3",
+    sound: soundArray[15],
   },
   {
     id: 17,
@@ -326,7 +328,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Thượng Hải thập niên 1930 là thành phố phức tạp với nhiều thế lực, thuận lợi cho hoạt động bí mật.",
     duration: 13,
-    sound: "/src/assets/file_sound/17.mp3",
+    sound: soundArray[16],
   },
   {
     id: 18,
@@ -344,7 +346,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Thập niên 1930, nguy cơ chiến tranh thế giới lần 2 đang đến gần. Phong trào cộng sản thế giới chuẩn bị đối đầu với phát xít.",
     duration: 13,
-    sound: "/src/assets/file_sound/18.mp3",
+    sound: soundArray[17],
   },
   {
     id: 19,
@@ -362,7 +364,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "Chiến tranh thế giới lần 2 bùng nổ, tạo điều kiện cho các phong trào giải phóng dân tộc ở châu Á.",
     duration: 14,
-    sound: "/src/assets/file_sound/19.mp3",
+    sound: soundArray[18],
   },
   {
     id: 20,
@@ -382,7 +384,7 @@ export const journeyStops: JourneyStop[] = [
     historicalContext:
       "1941, Nhật-Pháp thống trị song song ở Đông Dương. Nhân dân Việt Nam chịu đựng 'hai tầng áp bức'. Thời cơ cách mạng đã chín muồi.",
     duration: 24,
-    sound: "/src/assets/file_sound/20.mp3",
+    sound: soundArray[19],
   },
 ];
 
