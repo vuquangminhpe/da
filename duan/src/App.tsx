@@ -3,8 +3,8 @@ import "./App.css";
 
 function App() {
   return (
-    <div className="app-container">
-      <main className="relative">
+    <div className="app-container w-full overflow-x-hidden">
+      <main className="relative w-full">
         <Section1Journey />
       </main>
 

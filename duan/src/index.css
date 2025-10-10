@@ -8,3 +8,40 @@
     --vietnam-yellow: #ffebd3;
     --vietnam-white: #ffffff;
 }
+
+/* Prevent layout overflow and ensure proper responsive behavior */
+* {
+    max-width: 100%;
+}
+
+html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Ensure containers don't overflow */
+.app-container {
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 768px) {
+    /* Ensure text doesn't cause horizontal scroll */
+    h1, h2, h3, h4, h5, h6 {
+        word-break: break-word;
+        hyphens: auto;
+    }
+    
+    /* Ensure images are responsive */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}

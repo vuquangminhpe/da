@@ -316,7 +316,7 @@ const Section1Journey = () => {
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen  bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900 py-20 px-4 relative overflow-hidden"
+      className="min-h-screen w-full bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900 py-20 px-4 relative overflow-x-hidden"
     >
       {/* Hidden audio element for journey stop sounds */}
       <audio ref={stopAudioRef} />
@@ -330,14 +330,14 @@ const Section1Journey = () => {
 
       {/* Intro Screen */}
       {showIntro && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-1000 overflow-hidden">
+        <div className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden transition-opacity duration-1000">
           {/* Background Music - Play once only */}
           <audio ref={audioRef} src={introSound} />
 
           {/* Start Experience Overlay */}
           {showStartOverlay && (
             <div
-              className="fixed inset-0 z-[70] flex items-center justify-center cursor-pointer"
+              className="fixed inset-0 z-[70] flex items-center justify-center cursor-pointer overflow-y-auto overflow-x-hidden"
               style={{
                 background:
                   "linear-gradient(135deg, rgba(115, 1, 9, 0.95) 0%, rgba(0, 0, 0, 0.98) 100%)",
@@ -433,15 +433,16 @@ const Section1Journey = () => {
           <VietnamFlagBackground />
 
           {/* Content Container */}
-          <div className="relative z-10 text-center space-y-8 px-8 max-w-7xl mx-auto">
+          <div className="relative z-10 w-full max-w-5xl mx-auto px-4 py-4 min-h-screen flex flex-col justify-center items-center text-center">
+            <div className="w-full space-y-2 max-w-3xl">
             {/* Hero Image Section */}
             <div
-              className="flex justify-center mb-8 animate-fade-in-up"
+              className="flex justify-center mb-2 animate-fade-in-up"
               style={{ animationDelay: "0.2s" }}
             >
               <div className="relative">
                 <div
-                  className="w-80 h-80 md:w-96 md:h-96 rounded-full  overflow-hidden border-4 shadow-2xl"
+                  className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden border-4 shadow-2xl"
                   style={{ borderColor: "var(--vietnam-yellow)" }}
                 >
                   <img
@@ -462,21 +463,21 @@ const Section1Journey = () => {
                 ></div>
 
                 {/* Floating star decorations */}
-                <div className="absolute -top-4 -right-4">
-                  <svg className="w-12 h-12 animate-pulse" viewBox="0 0 50 50">
+                <div className="absolute -top-2 -right-2">
+                  <svg className="w-6 h-6 animate-pulse" viewBox="0 0 50 50">
                     <polygon
                       points="25,5 29.4,18.1 42.5,18.1 32.1,25.8 36.8,40.5 25,32.5 13.2,40.5 17.9,25.8 7.5,18.1 20.6,18.1"
                       fill="var(--vietnam-yellow)"
                       style={{
-                        filter: "drop-shadow(0 0 8px var(--vietnam-yellow))",
+                        filter: "drop-shadow(0 0 6px var(--vietnam-yellow))",
                       }}
                     />
                   </svg>
                 </div>
 
-                <div className="absolute -bottom-2 -left-4">
+                <div className="absolute -bottom-1 -left-2">
                   <svg
-                    className="w-8 h-8 animate-pulse"
+                    className="w-4 h-4 animate-pulse"
                     viewBox="0 0 50 50"
                     style={{ animationDelay: "1s" }}
                   >
@@ -493,19 +494,19 @@ const Section1Journey = () => {
             </div>
 
             {/* Main Title */}
-            <div className="space-y-4">
+            <div className="space-y-1">
               <h1
-                className="text-7xl md:text-9xl font-black animate-shimmer animate-fade-in-up"
+                className="text-3xl md:text-5xl lg:text-6xl font-black animate-shimmer animate-fade-in-up"
                 style={{
                   fontFamily: "var(--font-heading)",
                   animationDelay: "0.5s",
-                  fontSize: "clamp(4rem, 15vw, 8rem)",
+                  fontSize: "clamp(2rem, 8vw, 4rem)",
                 }}
               >
                 1911
               </h1>
               <div
-                className="w-32 h-1 mx-auto rounded-full animate-fade-in-up"
+                className="w-16 md:w-20 h-1 mx-auto rounded-full animate-fade-in-up"
                 style={{
                   background:
                     "linear-gradient(90deg, var(--vietnam-red), var(--vietnam-yellow), var(--vietnam-red))",
@@ -515,9 +516,9 @@ const Section1Journey = () => {
             </div>
 
             {/* Subtitle */}
-            <div className="space-y-6">
+            <div className="space-y-2">
               <h2
-                className="text-3xl md:text-5xl font-bold text-white animate-fade-in-up leading-tight"
+                className="text-lg md:text-xl lg:text-2xl font-bold text-white animate-fade-in-up leading-tight"
                 style={{
                   fontFamily: "var(--font-heading)",
                   animationDelay: "1.5s",
@@ -533,7 +534,7 @@ const Section1Journey = () => {
                 style={{ animationDelay: "1.8s" }}
               >
                 <p
-                  className="text-lg md:text-xl italic font-medium leading-relaxed"
+                  className="text-sm md:text-base lg:text-lg italic font-medium leading-relaxed"
                   style={{
                     fontFamily: "var(--font-body)",
                     color: "var(--vietnam-yellow)",
@@ -543,7 +544,7 @@ const Section1Journey = () => {
                   "Tôi đi tìm đường cứu nước"
                 </p>
                 <cite
-                  className="text-sm opacity-80 mt-2 block"
+                  className="text-xs opacity-80 mt-1 block"
                   style={{ color: "var(--vietnam-white)" }}
                 >
                   - Nguyễn Tất Thành, 1911
@@ -551,7 +552,7 @@ const Section1Journey = () => {
               </blockquote>
 
               <p
-                className="text-xl md:text-2xl animate-fade-in-up"
+                className="text-sm md:text-base lg:text-lg animate-fade-in-up"
                 style={{
                   fontFamily: "var(--font-body)",
                   color: "var(--vietnam-yellow)",
@@ -565,15 +566,15 @@ const Section1Journey = () => {
 
             {/* Character and Boat Animation - Smaller */}
             <div
-              className="flex justify-center items-center py-4 animate-fade-in-up"
+              className="flex justify-center items-center animate-fade-in-up"
               style={{ animationDelay: "2.5s" }}
             >
               <div className="relative">
                 <svg
-                  width="300"
-                  height="150"
+                  width="180"
+                  height="90"
                   viewBox="0 0 300 150"
-                  className="drop-shadow-xl"
+                  className="drop-shadow-lg"
                 >
                   {/* Stylized ocean waves */}
                   <defs>
@@ -661,12 +662,12 @@ const Section1Journey = () => {
 
             {/* Call to Action Button */}
             <div
-              className="animate-fade-in-up"
-              style={{ animationDelay: "3s", transform: "translateY(-10px)" }}
+              className="animate-fade-in-up pb-2"
+              style={{ animationDelay: "3s" }}
             >
               <button
                 onClick={playJourney}
-                className="group relative px-12 py-4 -translate-y-10 font-bold text-xl rounded-full shadow-2xl hover:scale-110 transition-all duration-300 overflow-hidden mb-8"
+                className="group relative px-6 py-2 font-bold text-base rounded-full shadow-2xl hover:scale-110 transition-all duration-300 overflow-hidden mb-2"
                 style={{
                   fontFamily: "var(--font-body)",
                   background: `linear-gradient(135deg, var(--vietnam-red) 0%, #8B0000 50%, var(--vietnam-red) 100%)`,
@@ -675,7 +676,7 @@ const Section1Journey = () => {
                   textShadow: "1px 1px 2px rgba(0, 0, 0, 0.8)",
                 }}
               >
-                <span className="relative z-10 flex items-center gap-3">
+                <span className="relative z-10 flex items-center gap-2">
                   <span>🚢</span>
                   BẮT ĐẦU HÀNH TRÌNH
                   <span>⭐</span>
@@ -692,7 +693,7 @@ const Section1Journey = () => {
 
               {/* Subtitle under button */}
               <p
-                className="text-sm opacity-80"
+                className="text-xs opacity-80 px-4"
                 style={{
                   fontFamily: "var(--font-body)",
                   color: "var(--vietnam-yellow)",
@@ -701,20 +702,21 @@ const Section1Journey = () => {
                 Khám phá 30 năm tìm đường cứu nước của Chủ tịch Hồ Chí Minh
               </p>
             </div>
+            </div>
           </div>
 
           {/* Decorative corner elements */}
-          <div className="absolute top-8 left-8 w-16 h-16 opacity-20">
-            <VietnamFlag x={0} y={0} scale={0.8} waving={true} />
+          <div className="absolute top-4 left-4 w-8 h-8 opacity-15">
+            <VietnamFlag x={0} y={0} scale={0.5} waving={true} />
           </div>
-          <div className="absolute top-8 right-8 w-16 h-16 opacity-20">
-            <VietnamFlag x={0} y={0} scale={0.8} waving={true} />
+          <div className="absolute top-4 right-4 w-8 h-8 opacity-15">
+            <VietnamFlag x={0} y={0} scale={0.5} waving={true} />
           </div>
-          <div className="absolute bottom-8 left-8 w-16 h-16 opacity-20">
-            <VietnamFlag x={0} y={0} scale={0.8} waving={true} />
+          <div className="absolute bottom-4 left-4 w-8 h-8 opacity-15">
+            <VietnamFlag x={0} y={0} scale={0.5} waving={true} />
           </div>
-          <div className="absolute bottom-8 right-8 w-16 h-16 opacity-20">
-            <VietnamFlag x={0} y={0} scale={0.8} waving={true} />
+          <div className="absolute bottom-4 right-4 w-8 h-8 opacity-15">
+            <VietnamFlag x={0} y={0} scale={0.5} waving={true} />
           </div>
         </div>
       )}
